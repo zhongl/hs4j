@@ -10,6 +10,11 @@ import java.lang.reflect.*;
  * 
  */
 public class ClassUtils {
+  public static void assertMethodReturnType(Method method, Class<?> returnType) {
+    if (method.getReturnType().equals(returnType)) return;
+    throw new IllegalArgumentException(returnType + " should return by method: " + method);
+  }
+
   @SuppressWarnings("unchecked")
   public static <T> Class<T> getGenericClassFrom(Type genericReturnType) throws ClassNotFoundException {
     final String sigin = genericReturnType.toString();
