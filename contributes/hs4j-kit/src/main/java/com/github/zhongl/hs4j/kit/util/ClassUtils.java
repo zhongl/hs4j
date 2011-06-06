@@ -17,14 +17,22 @@ public class ClassUtils {
 
   @SuppressWarnings("unchecked")
   public static <T> Class<T> getOnlyOneTypeArgumentClassFrom(ParameterizedType parameterizedType) {
-    Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+    final Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
     if (actualTypeArguments.length > 1)
       throw new IllegalArgumentException(parameterizedType + " has more than one type arguments");
     return (Class<T>) actualTypeArguments[0];
   }
 
+  public static boolean isIterable(Class<?> rawType) {
+    return Iterable.class.isAssignableFrom(rawType);
+  }
+
   public static boolean isParameterizedType(Type type) {
     return type instanceof ParameterizedType;
+  }
+
+  public static ParameterizedType parameterized(Type type) {
+    return (ParameterizedType) type;
   }
 
   private ClassUtils() {}
