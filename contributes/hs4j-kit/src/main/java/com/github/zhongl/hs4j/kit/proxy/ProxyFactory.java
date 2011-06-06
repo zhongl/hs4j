@@ -1,6 +1,5 @@
 package com.github.zhongl.hs4j.kit.proxy;
 
-import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -16,7 +15,7 @@ import com.github.zhongl.hs4j.kit.annotations.*;
 public abstract class ProxyFactory {
 
   @SuppressWarnings("unchecked")
-  public <T> T newProxyOf(Class<T> clazz) throws IOException {
+  public <T> T newProxyOf(Class<T> clazz) {
     scanAndMapMethodToInvacationHandlerWith(clazz);
     Class<?>[] interfaces = { clazz };
     return (T) Proxy.newProxyInstance(clazz.getClassLoader(), interfaces, dispatcher);
