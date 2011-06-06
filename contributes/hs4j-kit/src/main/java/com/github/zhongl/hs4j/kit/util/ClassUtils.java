@@ -16,11 +16,15 @@ public class ClassUtils {
   }
 
   @SuppressWarnings("unchecked")
-  public static <T> Class<T> getGenericClassFrom(Type genericReturnType) throws ClassNotFoundException {
-    final String sigin = genericReturnType.toString();
-    final int begin = sigin.indexOf('<') + 1;
-    final int end = sigin.indexOf('>');
-    return (Class<T>) Class.forName(sigin.substring(begin, end));
+  public static <T> Class<T> getOnlyOneTypeArgumentClassFrom(ParameterizedType parameterizedType) {
+    Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+    if (actualTypeArguments.length > 1)
+      throw new IllegalArgumentException(parameterizedType + " has more than one type arguments");
+    return (Class<T>) actualTypeArguments[0];
+  }
+
+  public static boolean isParameterizedType(Type type) {
+    return type instanceof ParameterizedType;
   }
 
   private ClassUtils() {}
