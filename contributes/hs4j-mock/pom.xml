@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>com.googlecode.hs4j</groupId>
 			<artifactId>hs4j</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
