@@ -6,14 +6,14 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * {@link EntityClass}
+ * {@link Entity}
  * 
  * @author <a href=mailto:zhong.lunfu@gmail.com>zhongl</a>
  * @created 2011-6-2
  * 
  */
-@Target(METHOD)
+@Target(TYPE)
 @Retention(RUNTIME)
-public @interface EntityClass {
+public @interface Entity {
   Class<?> value();
 }

@@ -1,10 +1,10 @@
 package com.github.zhongl.hs4j.kit;
 
-import static com.github.zhongl.hs4j.kit.annotations.HandlerSocket.Action.*;
 import static com.google.code.hs4j.FindOperator.*;
 
+import java.util.*;
+
 import com.github.zhongl.hs4j.kit.annotations.*;
-import com.github.zhongl.hs4j.kit.results.*;
 
 /**
  * {@link UserRepository}
@@ -14,40 +14,36 @@ import com.github.zhongl.hs4j.kit.results.*;
  * 
  */
 @Repository(database = "test", table = "user_t")
+@Entity(User.class)
 interface UserRepository {
-  @HandlerSocket(INSERT)
-  @EntityClass(User.class)
-  void add(User user);
 
-  @HandlerSocket(INSERT)
+  @Insert
+  void add(User user) throws Exception;
+
+  @Insert
   @Columns({ "seq", "name", "age" })
   void addUser(long id, String name, int age);
 
-  @HandlerSocket(DELELT)
-  @EntityClass(User.class)
+  @Delete
   void delete(User user);
 
-  @HandlerSocket(DELELT)
+  @Delete(LT)
   @Index("AGE")
-  @Columns({ "seq", "name", "age" })
-  void deleteUserAgeLessThan(@Operator(LT) int age);
+  void deleteUserAgeLessThan(int age);
 
-  @HandlerSocket(FIND)
+  @Find(GT)
   @Index("AGE")
-  @Columns({ "seq", "name", "age" })
-  ResultIterator<User> findUserAgeGreaterThan(@Operator(GT) int age, @Offset int offset, @Limit int limit);
+  Collection<User> findUserAgeGreaterThan(int age, @Offset int offset, @Limit int limit);
 
-  @HandlerSocket(FIND)
-  @Columns({ "name", "age" })
-  ResultIterator<User> findUserBy(@Operator(EQ) long id);
+  @Find
+  User findUserById(long value);
 
-  @HandlerSocket(UPDATE)
-  @EntityClass(User.class)
+  @Update
   void update(User user);
 
-  @HandlerSocket(UPDATE)
+  @Update
   @Columns("age")
   @Index("NAME")
-  void updateUserAge(@Operator(EQ) String name, int age);
+  void updateUserAge(String name, int age);
 
 }

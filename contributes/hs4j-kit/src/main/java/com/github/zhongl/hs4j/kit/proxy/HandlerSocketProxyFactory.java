@@ -55,7 +55,7 @@ public class HandlerSocketProxyFactory extends ProxyFactory {
     final Columns columns = method.getAnnotation(Columns.class);
     if (has(columns)) return columns.value();
 
-    final EntityClass entityClass = method.getAnnotation(EntityClass.class);
+    final Entity entityClass = method.getAnnotation(Entity.class);
     if (entityClass == null)
       throw new IllegalArgumentException("Either @Columns or @EntityClass should be annotated to method: " + method);
     return getColumnsFrom(entityClass.value().getFields());

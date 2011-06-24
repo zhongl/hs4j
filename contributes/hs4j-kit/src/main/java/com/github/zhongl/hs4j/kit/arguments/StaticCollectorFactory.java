@@ -18,7 +18,7 @@ public class StaticCollectorFactory {
 
   public static Collector<String[]> createKeysCollectorBy(ParameterAnnotations annotations) {
     final Method method = annotations.getMethod();
-    final EntityClass entityClass = method.getAnnotation(EntityClass.class);
+    final Entity entityClass = method.getAnnotation(Entity.class);
     if (entityClass != null) { // to find parameter type is entity class.
       assertNotBothEntityClassAndOperatorAreAnnotatedBy(annotations);
       assertParameterTypeJustOnlyBeEntityClassOn(method);
@@ -29,7 +29,7 @@ public class StaticCollectorFactory {
 
   private static void assertNotBothEntityClassAndOperatorAreAnnotatedBy(ParameterAnnotations annotations) {
     if (!annotations.getAnnotationsOf(Operator.class).isEmpty())
-      throw new IllegalArgumentException("Either " + EntityClass.class + " or " + Operator.class + " can be annotated");
+      throw new IllegalArgumentException("Either " + Entity.class + " or " + Operator.class + " can be annotated");
   }
 
   public static Collector<Integer> createLimitCollectorBy(ParameterAnnotations annotations) {
@@ -42,7 +42,7 @@ public class StaticCollectorFactory {
 
   public static Collector<String[]> createValuesCollectorFrom(ParameterAnnotations annotations) {
     final Method method = annotations.getMethod();
-    final EntityClass entityClass = method.getAnnotation(EntityClass.class);
+    final Entity entityClass = method.getAnnotation(Entity.class);
     if (entityClass != null) { // to find parameter type is entity class.
       assertParameterTypeJustOnlyBeEntityClassOn(method);
       final boolean excludePrimary = method.getAnnotation(HandlerSocket.class).value() != Action.INSERT;
@@ -53,7 +53,7 @@ public class StaticCollectorFactory {
 
   private static void assertParameterTypeJustOnlyBeEntityClassOn(final Method method) {
     final Class<?>[] parameterTypes = method.getParameterTypes();
-    Class<?> entityClass = method.getAnnotation(EntityClass.class).value();
+    Class<?> entityClass = method.getAnnotation(Entity.class).value();
     if (parameterTypes.length != 1 || !parameterTypes[0].equals(entityClass))
       throw new IllegalArgumentException("Paramter Types should only be " + entityClass);
   }

@@ -5,17 +5,12 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import com.google.code.hs4j.*;
-
 /**
- * {@link Operator}
- * 
- * @author <a href=mailto:zhong.lunfu@gmail.com>zhongl</a>
- * @created 2011-6-2
+ * {@link Insert}
+ * @author  <a href=mailto:jushi@taobao.com>jushi</a>
+ * @created Jun 24, 2011
  * 
  */
-@Target(PARAMETER)
+@Target(METHOD)
 @Retention(RUNTIME)
-public @interface Operator {
-  FindOperator value();
-}
+public @interface Insert {}

@@ -73,7 +73,7 @@ public class HandlerSocketProxyTest {
   public void findUserById() throws Exception {
     final long id = 1L;
     doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "name", "age" });
-    proxyFactory.newProxyOf(UserRepository.class).findUserBy(id);
+    proxyFactory.newProxyOf(UserRepository.class).findUserById(id);
     verify(session).find(toStringArray(id), EQ, DEFAULT_LIMIT, 0);
   }
 
