@@ -1,5 +1,6 @@
 package com.github.zhongl.hs4j.kit;
 
+import static com.github.zhongl.hs4j.kit.annotations.HandlerSocket.Command.*;
 import static com.google.code.hs4j.FindOperator.*;
 
 import java.util.*;
@@ -17,33 +18,43 @@ import com.github.zhongl.hs4j.kit.annotations.*;
 @Entity(User.class)
 interface UserRepository {
 
-  @Insert
+  @HandlerSocket(INSERT)
   void add(User user) throws Exception;
 
-  @Insert
-  @Columns({ "seq", "name", "age" })
-  void addUser(long id, String name, int age);
+  @HandlerSocket(INSERT)
+  void addUser(long id, String firsName, String lastName, int age);
 
-  @Delete
+  @HandlerSocket(DELETE)
   void delete(User user);
 
-  @Delete(LT)
+  @HandlerSocket(DELETE)
+  @Operator(LT)
   @Index("AGE")
   void deleteUserAgeLessThan(int age);
 
-  @Find(GT)
+  @HandlerSocket(FIND)
+  @Operator(GT)
   @Index("AGE")
-  Collection<User> findUserAgeGreaterThan(int age, @Offset int offset, @Limit int limit);
+  Collection<User> findUserAgeGreaterThan(@Key int age, @Offset int offset, @Limit int limit);
 
-  @Find
-  User findUserById(long value);
+  @HandlerSocket(FIND)
+  User findUserById(@Key long value);
 
-  @Update
+  @HandlerSocket(FIND)
+  @Index("FULL_NAME")
+  User findUserByFullName(@Key String firstName, @Key String lastName);
+
+  @HandlerSocket(FIND)
+  @Index("AGE")
+  @Operator(GT)
+  User findUserBy(@Key int age, @In("last_name") Set<String> nameSet);
+
+  @HandlerSocket(UPDATE)
   void update(User user);
 
-  @Update
-  @Columns("age")
+  @HandlerSocket(UPDATE)
+  @Columns({ "name", "age" })
   @Index("NAME")
-  void updateUserAge(String name, int age);
+  void updateUserAge(@Key String name, int age);
 
 }

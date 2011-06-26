@@ -6,11 +6,13 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 
 /**
- * {@link Insert}
- * @author  <a href=mailto:jushi@taobao.com>jushi</a>
- * @created Jun 24, 2011
+ * {@link In}
+ * @author  <a href=mailto:zhong.lunfu@gmail.com>zhongl</a>
+ * @created 2011-6-25
  * 
  */
-@Target(METHOD)
+@Target(PARAMETER)
 @Retention(RUNTIME)
-public @interface Insert {}
+public @interface In {
+  String value();
+}

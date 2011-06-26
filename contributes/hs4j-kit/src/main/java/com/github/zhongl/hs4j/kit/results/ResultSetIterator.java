@@ -65,7 +65,7 @@ public final class ResultSetIterator implements Iterator<Object> {
   }
 
   private String columnLabelOf(Field field) {
-    final ColumnName columnName = field.getAnnotation(ColumnName.class);
+    final Column columnName = field.getAnnotation(Column.class);
     return (columnName != null) ? columnName.value() : field.getName();
   }
 

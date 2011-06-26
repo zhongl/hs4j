@@ -23,18 +23,21 @@ public class ResultSetIteratorTest {
   @Test
   public void user() throws Exception {
     final long id = 1L;
-    final String name = "zhongl";
+    final String firstName = "shi";
+    final String lastName = "ju";
     final int age = 23;
     doAnswer(new NextAnswer(1)).when(resultSet).next();
-    doReturn(id).when(resultSet).getLong("seq");
-    doReturn(name).when(resultSet).getString("name");
+    doReturn(id).when(resultSet).getLong("id");
+    doReturn(firstName).when(resultSet).getString("first_name");
+    doReturn(lastName).when(resultSet).getString("last_name");
     doReturn(age).when(resultSet).getInt("age");
 
     final ResultSetIterator iterator = new ResultSetIterator(User.class.getName(), resultSet);
     assertThat(iterator.hasNext(), is(true));
     final User user = (User) iterator.next();
     assertThat(user.id, is(id));
-    assertThat(user.name, is(name));
+    assertThat(user.firstName, is(firstName));
+    assertThat(user.lastName, is(lastName));
     assertThat(user.age, is(age));
   }
 

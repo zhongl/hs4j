@@ -5,16 +5,13 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import com.google.code.hs4j.*;
-
 /**
- * {@link Find}
- * @author  <a href=mailto:jushi@taobao.com>jushi</a>
- * @created Jun 24, 2011
+ * {@link Key}
+ * 
+ * @author <a href=mailto:zhong.lunfu@gmail.com>zhongl</a>
+ * @created 2011-6-25
  * 
  */
-@Target(METHOD)
+@Target(PARAMETER)
 @Retention(RUNTIME)
-public @interface Find {
-  FindOperator value() default FindOperator.EQ;
-}
+public @interface Key {}

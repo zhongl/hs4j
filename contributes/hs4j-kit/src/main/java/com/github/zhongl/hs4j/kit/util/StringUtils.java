@@ -1,5 +1,7 @@
 package com.github.zhongl.hs4j.kit.util;
 
+import java.util.*;
+
 /**
  * {@link StringUtils}
  * 
@@ -16,11 +18,26 @@ public class StringUtils {
     return values;
   }
 
+  public static String[] toStringArray(List<Object> objects) {
+    String[] values = new String[objects.size()];
+    for (int i = 0; i < values.length; i++) {
+      values[i] = objects.get(i).toString();
+    }
+    return values;
+  }
+
+  public static String[] toStringArray(Object[] objects, int from, int to) {
+    String[] values = new String[objects.length];
+    for (int i = from; i <= to; i++) {
+      values[i] = objects[i].toString();
+    }
+    return values;
+  }
+
   public static String join(String... strings) {
     final StringBuilder sb = new StringBuilder();
     for (final String string : strings)
       sb.append(string);
     return sb.toString();
   }
-
 }

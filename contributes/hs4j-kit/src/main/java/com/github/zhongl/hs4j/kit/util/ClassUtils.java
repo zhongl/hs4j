@@ -36,4 +36,23 @@ public class ClassUtils {
   }
 
   private ClassUtils() {}
+
+  public static boolean isBoolean(Type type) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  public static boolean isInteger(Type returnType) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  public static void assertNotVoid(Type returnType) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public static boolean isVoid(Class<?> returnType) {
+    return void.class.equals(returnType);
+  }
 }

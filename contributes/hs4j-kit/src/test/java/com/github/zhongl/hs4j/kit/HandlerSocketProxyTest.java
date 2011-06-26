@@ -24,37 +24,40 @@ public class HandlerSocketProxyTest {
   @Test
   public void addUser() throws Exception {
     final long id = 1L;
-    final String name = "jushi";
+    final String firstName = "shi";
+    final String lastName = "ju";
     final int age = 30;
-    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "seq", "name", "age" });
-    proxyFactory.newProxyOf(UserRepository.class).addUser(id, name, age);
-    verify(session).insert(toStringArray(id, name, age));
+    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "id", "first_name", "last_name", "age" });
+    proxyFactory.newProxyOf(UserRepository.class).addUser(id, firstName, lastName, age);
+    verify(session).insert(toStringArray(id, firstName, lastName, age));
   }
 
   @Test
   public void addUserObject() throws Exception {
     final long id = 1L;
-    final String name = "jushi";
+    final String firstName = "shi";
+    final String lastName = "ju";
     final int age = 30;
-    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "seq", "name", "age" });
-    proxyFactory.newProxyOf(UserRepository.class).add(new User(id, name, age));
-    verify(session).insert(toStringArray(id, name, age));
+    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "id", "first_name", "last_name", "age" });
+    proxyFactory.newProxyOf(UserRepository.class).add(new User(id, firstName, lastName, age));
+    verify(session).insert(toStringArray(id, firstName, lastName, age));
   }
 
   @Test
   public void deleteUser() throws Exception {
     final long id = 1L;
-    final String name = "zhongl";
+    final String firstName = "shi";
+    final String lastName = "ju";
     final int age = 22;
-    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "seq", "name", "age" });
-    proxyFactory.newProxyOf(UserRepository.class).delete(new User(id, name, age));
+    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "id", "first_name", "last_name", "age" });
+    proxyFactory.newProxyOf(UserRepository.class).delete(new User(id, firstName, lastName, age));
     verify(session).delete(toStringArray(id), EQ, DEFAULT_LIMIT, DEFAULT_OFFSET);
   }
 
   @Test
   public void deleteUserAgeLessThan() throws Exception {
     final int age = 22;
-    doReturnSessionWhenHsClientOpenIndexSession("AGE", new String[] { "seq", "name", "age" });
+    doReturnSessionWhenHsClientOpenIndexSession("AGE", new String[] { "id", "first_name", "last_name", "age" });
     proxyFactory.newProxyOf(UserRepository.class).deleteUserAgeLessThan(age);
     verify(session).delete(toStringArray(age), LT, DEFAULT_LIMIT, DEFAULT_OFFSET);
   }
@@ -64,7 +67,7 @@ public class HandlerSocketProxyTest {
     final int age = 30;
     final int offset = 0;
     final int limit = 100;
-    doReturnSessionWhenHsClientOpenIndexSession("AGE", new String[] { "seq", "name", "age" });
+    doReturnSessionWhenHsClientOpenIndexSession("AGE", new String[] { "id", "first_name", "last_name", "age" });
     proxyFactory.newProxyOf(UserRepository.class).findUserAgeGreaterThan(age, offset, limit);
     verify(session).find(toStringArray(age), GT, limit, offset);
   }
@@ -72,7 +75,7 @@ public class HandlerSocketProxyTest {
   @Test
   public void findUserById() throws Exception {
     final long id = 1L;
-    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "name", "age" });
+    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "id", "first_name", "last_name", "age" });
     proxyFactory.newProxyOf(UserRepository.class).findUserById(id);
     verify(session).find(toStringArray(id), EQ, DEFAULT_LIMIT, 0);
   }
@@ -94,11 +97,16 @@ public class HandlerSocketProxyTest {
   @Test
   public void updateUserObject() throws Exception {
     final long id = 1L;
-    final String name = "zhongl";
+    final String firstName = "shi";
+    final String lastName = "ju";
     final int age = 22;
-    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "seq", "name", "age" });
-    proxyFactory.newProxyOf(UserRepository.class).update(new User(id, name, age));
-    verify(session).update(toStringArray(id), toStringArray(name, age), EQ, DEFAULT_LIMIT, DEFAULT_OFFSET);
+    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "id", "first_name", "last_name", "age" });
+    proxyFactory.newProxyOf(UserRepository.class).update(new User(id, firstName, lastName, age));
+    verify(session).update(toStringArray(id),
+                           toStringArray(firstName, lastName, age),
+                           EQ,
+                           DEFAULT_LIMIT,
+                           DEFAULT_OFFSET);
   }
 
   private void doReturnSessionWhenHsClientOpenIndexSession(String index, final String[] columns) throws Exception {

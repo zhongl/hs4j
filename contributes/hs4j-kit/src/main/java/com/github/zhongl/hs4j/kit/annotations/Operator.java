@@ -5,15 +5,16 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import com.google.code.hs4j.*;
+
 /**
- * {@link ColumnName}
- * 
- * @author <a href=mailto:zhong.lunfu@gmail.com>zhongl</a>
- * @created 2011-6-2
+ * {@link Operator}
+ * @author  <a href=mailto:zhong.lunfu@gmail.com>zhongl</a>
+ * @created 2011-6-25
  * 
  */
-@Target(FIELD)
+@Target(METHOD)
 @Retention(RUNTIME)
-public @interface ColumnName {
-  String value();
+public @interface Operator {
+  FindOperator value();
 }
