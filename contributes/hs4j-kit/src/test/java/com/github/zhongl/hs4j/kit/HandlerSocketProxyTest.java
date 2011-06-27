@@ -155,7 +155,7 @@ public class HandlerSocketProxyTest {
   public void updateUserAge() throws Exception {
     final String name = "zhongl";
     final int age = 22;
-    doReturnSessionWhenHsClientOpenIndexSession("NAME", new String[] { "name", "age" });
+    doReturnSessionWhenHsClientOpenIndexSession("NAME", new String[] { "last_name", "age" });
     doReturn(3).when(session).update(toStringArray(name), toStringArray(age), EQ, DEFAULT_LIMIT, DEFAULT_OFFSET);
     int changed = proxyFactory.newProxyOf(UserRepository.class).updateUserAge(name, age);
     assertThat(changed, is(3));
