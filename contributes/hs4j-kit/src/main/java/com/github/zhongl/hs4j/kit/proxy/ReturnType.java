@@ -29,7 +29,7 @@ import com.github.zhongl.hs4j.kit.util.*;
  * @created 2011-6-25
  * 
  */
-class ReturnType {
+public class ReturnType {
 
   private static Object byteValue(ResultSet result) throws SQLException {
     return result.getByte(0);
