@@ -1,10 +1,9 @@
 package com.github.zhongl.hs4j.kit.proxy;
 
-import static com.github.zhongl.hs4j.kit.arguments.EntityCollector.CollectStrategy.*;
+import static com.github.zhongl.hs4j.kit.proxy.EntityCollector.CollectStrategy.*;
 
 import java.lang.reflect.*;
 
-import com.github.zhongl.hs4j.kit.arguments.*;
 import com.google.code.hs4j.*;
 
 /**
@@ -31,7 +30,7 @@ public class InsertHandler implements InvocationHandler {
   }
 
   private void assertValid(final ReturnType returnType) {
-    if (returnType.isNot(void.class) && returnType.isNot(boolean.class) && returnType.isNot(Boolean.class))
+    if (returnType.isNotIn(Void.class, Void.TYPE, Boolean.TYPE, Boolean.class))
       throw new IllegalArgumentException(returnType + " is unsupported with INSERT command.");
   }
 

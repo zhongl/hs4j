@@ -1,7 +1,6 @@
 package com.github.zhongl.hs4j.kit;
 
 import com.github.zhongl.hs4j.kit.annotations.*;
-import com.github.zhongl.hs4j.kit.results.*;
 
 public class User {
 

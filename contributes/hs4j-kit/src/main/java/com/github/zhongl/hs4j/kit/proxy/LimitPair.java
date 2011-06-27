@@ -4,18 +4,17 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import com.github.zhongl.hs4j.kit.annotations.*;
-import com.github.zhongl.hs4j.kit.arguments.*;
-import com.github.zhongl.hs4j.kit.arguments.ParameterAnnotations.ApplyableCollector;
+import com.github.zhongl.hs4j.kit.proxy.ParameterAnnotations.ApplyableCollector;
 
 /**
- * {@link Limit}
+ * {@link LimitPair}
  * 
  * @author <a href=mailto:zhong.lunfu@gmail.com>zhongl</a>
  * @created 2011-6-26
  * 
  */
-class Limit {
-  public Limit(ParameterAnnotations parameterAnnotations, ReturnType returnType) {
+class LimitPair {
+  public LimitPair(ParameterAnnotations parameterAnnotations, ReturnType returnType) {
     if (returnType.isSingleEntity()) {
       limitCollector = new ConstantIntegerCollector(1);
       offsetCollector = new ConstantIntegerCollector(0);
@@ -53,7 +52,7 @@ class Limit {
 
     @Override
     protected boolean apply(Annotation annotation) {
-      return annotation.getClass().isAssignableFrom(clazz);
+      return clazz.isInstance(annotation);
     }
 
     @Override

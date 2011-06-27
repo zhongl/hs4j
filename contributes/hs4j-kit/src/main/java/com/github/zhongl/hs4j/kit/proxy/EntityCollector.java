@@ -1,4 +1,4 @@
-package com.github.zhongl.hs4j.kit.arguments;
+package com.github.zhongl.hs4j.kit.proxy;
 
 import static com.github.zhongl.hs4j.kit.util.StringUtils.*;
 
@@ -9,9 +9,9 @@ import net.vidageek.mirror.dsl.*;
 /**
  * {@link EntityCollector} supposes :
  * <ul>
- * <li> the order of fields as same as columns in the table, 
- * <li> the first field as the {@code PRIMARY} key, 
- * <li> every field's toString result as value.
+ * <li>the order of fields as same as columns in the table,
+ * <li>the first field as the {@code PRIMARY} key,
+ * <li>every field's toString result as value.
  * </ul>
  * 
  * @author <a href=mailto:zhong.lunfu@gmail.com>zhongl</a>
@@ -19,7 +19,6 @@ import net.vidageek.mirror.dsl.*;
  * 
  */
 public class EntityCollector implements Collector<String[]> {
-
 
   public EntityCollector(CollectStrategy strategy) {
     this.strategy = strategy;
@@ -41,7 +40,6 @@ public class EntityCollector implements Collector<String[]> {
   private final CollectStrategy strategy;
 
   public enum CollectStrategy {
-    /** Default as one primary key.  */
     KEYS {
       @Override
       String[] collectFrom(Object[] fieldValues) {
@@ -60,7 +58,9 @@ public class EntityCollector implements Collector<String[]> {
         return toStringArray(fieldValues);
       }
     };
+
     abstract String[] collectFrom(Object[] fieldValues);
+
     private static final int PRIMARY = 0;
   }
 }

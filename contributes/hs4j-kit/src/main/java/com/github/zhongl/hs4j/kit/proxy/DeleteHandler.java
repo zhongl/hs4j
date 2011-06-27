@@ -2,8 +2,7 @@ package com.github.zhongl.hs4j.kit.proxy;
 
 import java.lang.reflect.*;
 
-import com.github.zhongl.hs4j.kit.arguments.*;
-import com.github.zhongl.hs4j.kit.arguments.EntityCollector.CollectStrategy;
+import com.github.zhongl.hs4j.kit.proxy.EntityCollector.CollectStrategy;
 import com.google.code.hs4j.*;
 
 /**
@@ -22,7 +21,7 @@ public class DeleteHandler implements InvocationHandler {
     this.session = session;
     this.operator = operator;
     this.returnType = returnType;
-    limit = new Limit(parameterAnnotations, returnType);
+    limit = new LimitPair(parameterAnnotations, returnType);
     keysCollector =
       parameterAnnotations.isEntityTypeParameter() ? new EntityCollector(CollectStrategy.KEYS)
         : parameterAnnotations.apply(new KeysCollector());
@@ -49,6 +48,6 @@ public class DeleteHandler implements InvocationHandler {
   private final FindOperator operator;
   private final ReturnType returnType;
   private final Collector<String[]> keysCollector;
-  private final Limit limit;
+  private final LimitPair limit;
 
 }

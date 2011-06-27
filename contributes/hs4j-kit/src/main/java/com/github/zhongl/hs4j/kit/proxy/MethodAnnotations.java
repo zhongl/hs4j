@@ -5,7 +5,6 @@ import static com.github.zhongl.hs4j.kit.util.AssertUtils.*;
 import java.lang.reflect.*;
 
 import com.github.zhongl.hs4j.kit.annotations.*;
-import com.github.zhongl.hs4j.kit.arguments.*;
 import com.google.code.hs4j.*;
 
 /**
@@ -53,7 +52,7 @@ class MethodAnnotations {
     return (isEmpty(columns) || isEmpty(columns.value())) ? value : columns.value();
   }
 
-  public String getIndexNameOrDefaultBy(String value) {
+  public String getIndexNameOrDefault(String value) {
     return isEmpty(index) ? value : index.value();
   }
 

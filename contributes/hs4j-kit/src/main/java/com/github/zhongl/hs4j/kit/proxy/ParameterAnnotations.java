@@ -1,4 +1,4 @@
-package com.github.zhongl.hs4j.kit.arguments;
+package com.github.zhongl.hs4j.kit.proxy;
 
 import static com.github.zhongl.hs4j.kit.util.AssertUtils.*;
 

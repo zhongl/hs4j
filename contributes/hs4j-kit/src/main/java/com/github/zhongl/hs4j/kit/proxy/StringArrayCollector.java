@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import com.github.zhongl.hs4j.kit.annotations.*;
-import com.github.zhongl.hs4j.kit.arguments.ParameterAnnotations.ApplyableCollector;
+import com.github.zhongl.hs4j.kit.proxy.ParameterAnnotations.*;
 
 /**
  * {@link StringArrayCollector}
@@ -32,12 +32,6 @@ abstract class StringArrayCollector extends ApplyableCollector<String[]> {
   }
 }
 
-/**
- * {@link ValuesCollector}
- * @author  <a href=mailto:zhong.lunfu@gmail.com>zhongl</a>
- * @created 2011-6-26
- * 
- */
 class ValuesCollector extends StringArrayCollector {
 
   public ValuesCollector() {
@@ -51,16 +45,10 @@ class ValuesCollector extends StringArrayCollector {
   
 }
 
-/**
- * {@link KeysCollector}
- * @author  <a href=mailto:zhong.lunfu@gmail.com>zhongl</a>
- * @created 2011-6-26
- * 
- */
 class KeysCollector extends StringArrayCollector {
 
   public KeysCollector() {
-    super("At lease one argument annotated by @key");
+    super("At lease one argument should be annotated by @key.");
   }
 
   @Override

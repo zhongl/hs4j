@@ -2,7 +2,6 @@ package com.github.zhongl.hs4j.kit.proxy;
 
 import java.lang.reflect.*;
 
-import com.github.zhongl.hs4j.kit.arguments.*;
 import com.google.code.hs4j.*;
 
 /**
@@ -22,8 +21,8 @@ public class FindHandler implements InvocationHandler {
     this.session = session;
     this.operator = operator;
     this.returnType = returnType;
+    limit  = new LimitPair(parameterAnnotations, returnType);
     keysCollector = parameterAnnotations.apply(new KeysCollector());
-    limit  = new Limit(parameterAnnotations, returnType);
   }
   
   @Override
@@ -32,7 +31,7 @@ public class FindHandler implements InvocationHandler {
   }
 
   private void assertVaild(ReturnType returnType) {
-    if (returnType.is(void.class))
+    if (returnType.isIn(Void.class, Void.TYPE))
       throw new IllegalArgumentException(returnType + " is unsupported with FIND command.");
   }
 
@@ -52,6 +51,6 @@ public class FindHandler implements InvocationHandler {
   private final ReturnType returnType;
   private final FindOperator operator;
   private final Collector<String[]> keysCollector;
-  private final Limit limit;
+  private final LimitPair limit;
 
 }

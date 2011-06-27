@@ -3,6 +3,7 @@ package com.github.zhongl.hs4j.kit;
 import static com.github.zhongl.hs4j.kit.annotations.HandlerSocket.Command.*;
 import static com.google.code.hs4j.FindOperator.*;
 
+import java.sql.*;
 import java.util.*;
 
 import com.github.zhongl.hs4j.kit.annotations.*;
@@ -19,10 +20,10 @@ import com.github.zhongl.hs4j.kit.annotations.*;
 interface UserRepository {
 
   @HandlerSocket(INSERT)
-  void add(User user) throws Exception;
+  void add(User user);
 
   @HandlerSocket(INSERT)
-  void addUser(long id, String firsName, String lastName, int age);
+  void addUser(long id, String firsName, String lastName, int age) throws SQLException;
 
   @HandlerSocket(DELETE)
   void delete(User user);
@@ -30,7 +31,7 @@ interface UserRepository {
   @HandlerSocket(DELETE)
   @Operator(LT)
   @Index("AGE")
-  void deleteUserAgeLessThan(int age);
+  void deleteUserAgeLessThan(@Key int age);
 
   @HandlerSocket(FIND)
   @Operator(GT)

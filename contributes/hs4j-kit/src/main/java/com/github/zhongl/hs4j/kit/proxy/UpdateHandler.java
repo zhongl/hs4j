@@ -1,10 +1,9 @@
 package com.github.zhongl.hs4j.kit.proxy;
 
-import static com.github.zhongl.hs4j.kit.arguments.EntityCollector.CollectStrategy.*;
+import static com.github.zhongl.hs4j.kit.proxy.EntityCollector.CollectStrategy.*;
 
 import java.lang.reflect.*;
 
-import com.github.zhongl.hs4j.kit.arguments.*;
 import com.google.code.hs4j.*;
 
 /**
@@ -23,7 +22,7 @@ public class UpdateHandler implements InvocationHandler {
     this.session = session;
     this.operator = operator;
     this.returnType = returnType;
-    limit = new Limit(parameterAnnotations, returnType);
+    limit = new LimitPair(parameterAnnotations, returnType);
     if (parameterAnnotations.isEntityTypeParameter()) {
       keysCollector = new EntityCollector(KEYS);
       valuesCollector = new EntityCollector(VALUES);
@@ -57,7 +56,7 @@ public class UpdateHandler implements InvocationHandler {
   private final IndexSession session;
   private final FindOperator operator;
   private final ReturnType returnType;
-  private final Limit limit;
+  private final LimitPair limit;
   private final Collector<String[]> valuesCollector;
   private final Collector<String[]> keysCollector;
 

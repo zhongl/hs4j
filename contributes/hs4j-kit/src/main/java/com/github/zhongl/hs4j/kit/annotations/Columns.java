@@ -12,7 +12,7 @@ import java.lang.annotation.*;
  * @created 2011-6-2
  * 
  */
-@Target(METHOD)
+@Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 public @interface Columns {
   String[] value();

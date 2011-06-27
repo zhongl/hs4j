@@ -27,9 +27,9 @@ public class StringUtils {
   }
 
   public static String[] toStringArray(Object[] objects, int from, int to) {
-    String[] values = new String[objects.length];
-    for (int i = from; i <= to; i++) {
-      values[i] = objects[i].toString();
+    String[] values = new String[to - from];
+    for (int i = 0; i < values.length; i++) {
+      values[i] = objects[i + from].toString();
     }
     return values;
   }
