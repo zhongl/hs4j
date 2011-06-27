@@ -20,13 +20,13 @@ import com.github.zhongl.hs4j.kit.annotations.*;
 interface UserRepository {
 
   @HandlerSocket(INSERT)
-  void add(User user);
+  boolean add(User user);
 
   @HandlerSocket(INSERT)
   void addUser(long id, String firsName, String lastName, int age) throws SQLException;
 
   @HandlerSocket(DELETE)
-  void delete(User user);
+  int delete(User user);
 
   @HandlerSocket(DELETE)
   @Operator(LT)
@@ -47,15 +47,16 @@ interface UserRepository {
 
   @HandlerSocket(FIND)
   @Index("AGE")
-  @Operator(GT)
-  User findUserBy(@Key int age, @In("last_name") Set<String> nameSet);
+  @Columns({ "last_name", "age" })
+  @Operator(EQ)
+  Collection<String> findLastNameOfUserByAge(@Key int value);
 
   @HandlerSocket(UPDATE)
   void update(User user);
 
   @HandlerSocket(UPDATE)
-  @Columns({ "name", "age" })
+  @Columns({ "last_name", "age" })
   @Index("NAME")
-  void updateUserAge(@Key String name, int age);
+  int updateUserAge(@Key String lastName, int age);
 
 }
