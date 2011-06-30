@@ -18,8 +18,9 @@ import com.google.code.hs4j.*;
  */
 public class HandlerSocketProxyFactory extends ProxyFactory {
 
-  public HandlerSocketProxyFactory(HSClient hsClient) {
+  public HandlerSocketProxyFactory(HSClient hsClient, String database) {
     this.hsClient = hsClient;
+    this.database = database;
     sessionCache = new HashMap<Object, IndexSession>();
     method2Handler = new HashMap<Method, InvocationHandler>();
   }
@@ -27,7 +28,6 @@ public class HandlerSocketProxyFactory extends ProxyFactory {
   @Override
   protected synchronized InvocationHandler handlerOf(Class<?> clazz) {
     ClassAnnotations classAnnotations = new ClassAnnotations(clazz);
-    String database = classAnnotations.getDatabase();
     String table = classAnnotations.getTable();
 
     for (Method method : clazz.getMethods()) {
@@ -39,24 +39,6 @@ public class HandlerSocketProxyFactory extends ProxyFactory {
       method2Handler.put(method, supportedCastExceptionHandler(handler, method.getExceptionTypes()));
     }
     return dispatcher;
-  }
-
-  private InvocationHandler supportedCastExceptionHandler(final InvocationHandler handler, final Class<?>[] exceptionTypes) {
-    final Set<Class<?>> exceptionTypeSet = CollectionUtils.set(exceptionTypes);
-    final Class<?> firstExceptionType = exceptionTypes.length > 0 ? exceptionTypes[0] : null;
-    return new InvocationHandler() {
-
-      @Override
-      public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        try {
-          return handler.invoke(proxy, method, args);
-        } catch (Throwable e) {
-          if (!exceptionTypeSet.contains(e.getClass()) && firstExceptionType != null)
-            throw (Throwable)firstExceptionType.getConstructor(Throwable.class).newInstance(e);
-          throw e;
-        }
-      }
-    };
   }
 
   private IndexSession getOrCreateIndexSessionBy(String database, String table, String indexName, String[] columns) {
@@ -74,6 +56,27 @@ public class HandlerSocketProxyFactory extends ProxyFactory {
       throw new IllegalStateException("HandlerSocket can't open index.", e);
     }
   }
+
+  private InvocationHandler supportedCastExceptionHandler(final InvocationHandler handler,
+                                                          final Class<?>[] exceptionTypes) {
+    final Set<Class<?>> exceptionTypeSet = CollectionUtils.set(exceptionTypes);
+    final Class<?> firstExceptionType = exceptionTypes.length > 0 ? exceptionTypes[0] : null;
+    return new InvocationHandler() {
+
+      @Override
+      public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        try {
+          return handler.invoke(proxy, method, args);
+        } catch (Throwable e) {
+          if (!exceptionTypeSet.contains(e.getClass()) && firstExceptionType != null)
+            throw (Throwable) firstExceptionType.getConstructor(Throwable.class).newInstance(e);
+          throw e;
+        }
+      }
+    };
+  }
+
+  private final String database;
 
   private final HSClient hsClient;
   private final Dispatcher dispatcher = new Dispatcher();

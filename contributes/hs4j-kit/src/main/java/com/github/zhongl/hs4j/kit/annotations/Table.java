@@ -5,7 +5,7 @@ import static java.lang.annotation.ElementType.*;
 import java.lang.annotation.*;
 
 /**
- * {@link Repository}
+ * {@link Table}
  * 
  * @author <a href=mailto:zhong.lunfu@gmail.com>zhongl</a>
  * @created 2011-6-2
@@ -13,8 +13,6 @@ import java.lang.annotation.*;
  */
 @Target(TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Repository {
-  String database();
-
-  String table();
+public @interface Table {
+  String value();
 }

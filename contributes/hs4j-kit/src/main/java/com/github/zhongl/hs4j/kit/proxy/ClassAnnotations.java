@@ -30,7 +30,7 @@ class ClassAnnotations {
 
   public ClassAnnotations(Class<?> clazz) {
     this.clazz = clazz;
-    repository = clazz.getAnnotation(Repository.class);
+    table = clazz.getAnnotation(Table.class);
     columns = clazz.getAnnotation(Columns.class);
     entity = clazz.getAnnotation(Entity.class);
     index = clazz.getAnnotation(Index.class);
@@ -43,22 +43,17 @@ class ClassAnnotations {
     return getColumnsFrom(entity.value());
   }
 
-  public String getDatabase() {
-    if (isEmpty(repository)) throw new IllegalArgumentException(clazz + " should be annotated with @Repository");
-    return repository.database();
-  }
-
   public String getIndexName() {
     return isEmpty(index) ? "PRIMARY" : index.value();
   }
 
   public String getTable() {
-    if (isEmpty(repository)) throw new IllegalArgumentException(clazz + " should be annotated with @Repository");
-    return repository.table();
+    if (isEmpty(table)) throw new IllegalArgumentException(clazz + " should be annotated with @Table");
+    return table.value();
   }
 
   private final Class<?> clazz;
-  private final Repository repository;
+  private final Table table;
   private final Columns columns;
   private final Entity entity;
   private final Index index;

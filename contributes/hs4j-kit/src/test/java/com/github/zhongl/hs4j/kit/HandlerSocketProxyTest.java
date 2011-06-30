@@ -27,6 +27,7 @@ import com.google.code.hs4j.exception.*;
  */
 public class HandlerSocketProxyTest {
 
+  private static final String DATABASE = "database";
   private final static class NextTrueTimeAnswer implements Answer<Boolean> {
     
     private int time;
@@ -177,11 +178,11 @@ public class HandlerSocketProxyTest {
   }
 
   private void doReturnSessionWhenHsClientOpenIndexSession(String index, final String[] columns) throws Exception {
-    doReturn(session).when(hsClient).openIndexSession("test", "user_t", index, columns);
+    doReturn(session).when(hsClient).openIndexSession(DATABASE, "user_t", index, columns);
   }
 
   private final HSClient hsClient = mock(HSClient.class);
   private final IndexSession session = mock(IndexSession.class);
-  private final ProxyFactory proxyFactory = new HandlerSocketProxyFactory(hsClient);
+  private final ProxyFactory proxyFactory = new HandlerSocketProxyFactory(hsClient, DATABASE);
 
 }

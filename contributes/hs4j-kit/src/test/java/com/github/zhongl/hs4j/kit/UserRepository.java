@@ -15,7 +15,7 @@ import com.github.zhongl.hs4j.kit.annotations.*;
  * @created 2011-6-2
  * 
  */
-@Repository(database = "test", table = "user_t")
+@Table("user_t")
 @Entity(User.class)
 interface UserRepository {
 
