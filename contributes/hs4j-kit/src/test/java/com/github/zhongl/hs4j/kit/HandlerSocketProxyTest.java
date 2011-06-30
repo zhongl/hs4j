@@ -14,8 +14,6 @@ import org.junit.*;
 import org.mockito.invocation.*;
 import org.mockito.stubbing.*;
 
-import com.github.zhongl.hs4j.kit.proxy.*;
-import com.google.code.hs4j.*;
 import com.google.code.hs4j.exception.*;
 
 /**
@@ -25,25 +23,7 @@ import com.google.code.hs4j.exception.*;
  * @created 2011-6-2
  * 
  */
-public class HandlerSocketProxyTest {
-
-  private static final String DATABASE = "database";
-  private final static class NextTrueTimeAnswer implements Answer<Boolean> {
-    
-    private int time;
-
-    public NextTrueTimeAnswer(int time) {
-      this.time = time;
-    }
-
-    @Override
-    public Boolean answer(InvocationOnMock invocation) throws Throwable {
-      return --time >= 0;
-    }
-  }
-  
-  private static final int DEFAULT_LIMIT = Integer.MAX_VALUE;
-  private static final int DEFAULT_OFFSET = 0;
+public class HandlerSocketProxyTest extends BaseTest {
 
   @Test
   public void addUser() throws Exception {
@@ -51,20 +31,9 @@ public class HandlerSocketProxyTest {
     final String firstName = "shi";
     final String lastName = "ju";
     final int age = 30;
-    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "id", "first_name", "last_name", "age" });
+    doReturnSessionWhenHsClientOpenIndexSession(PRIMARY, new String[] { "id", "first_name", "last_name", "age" });
     proxyFactory.newProxyOf(UserRepository.class).addUser(id, firstName, lastName, age);
     verify(session).insert(toStringArray(id, firstName, lastName, age));
-  }
-
-  @Test(expected = SQLException.class)
-  public void castException() throws Exception {
-    final long id = 1L;
-    final String firstName = "shi";
-    final String lastName = "ju";
-    final int age = 30;
-    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "id", "first_name", "last_name", "age" });
-    doThrow(new HandlerSocketException()).when(session).insert((String[]) any());
-    proxyFactory.newProxyOf(UserRepository.class).addUser(id, firstName, lastName, age);
   }
 
   @Test
@@ -73,10 +42,21 @@ public class HandlerSocketProxyTest {
     final String firstName = "shi";
     final String lastName = "ju";
     final int age = 30;
-    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "id", "first_name", "last_name", "age" });
+    doReturnSessionWhenHsClientOpenIndexSession(PRIMARY, new String[] { "id", "first_name", "last_name", "age" });
     doReturn(true).when(session).insert(toStringArray(id, firstName, lastName, age));
     boolean result = proxyFactory.newProxyOf(UserRepository.class).add(new User(id, firstName, lastName, age));
     assertThat(result, is(true));
+  }
+
+  @Test(expected = SQLException.class)
+  public void castException() throws Exception {
+    final long id = 1L;
+    final String firstName = "shi";
+    final String lastName = "ju";
+    final int age = 30;
+    doReturnSessionWhenHsClientOpenIndexSession(PRIMARY, new String[] { "id", "first_name", "last_name", "age" });
+    doThrow(new HandlerSocketException()).when(session).insert((String[]) any());
+    proxyFactory.newProxyOf(UserRepository.class).addUser(id, firstName, lastName, age);
   }
 
   @Test
@@ -85,34 +65,10 @@ public class HandlerSocketProxyTest {
     final String firstName = "shi";
     final String lastName = "ju";
     final int age = 22;
-    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "id", "first_name", "last_name", "age" });
+    doReturnSessionWhenHsClientOpenIndexSession(PRIMARY, new String[] { "id", "first_name", "last_name", "age" });
     doReturn(1).when(session).delete(toStringArray(id), EQ, DEFAULT_LIMIT, DEFAULT_OFFSET);
     int deleted = proxyFactory.newProxyOf(UserRepository.class).delete(new User(id, firstName, lastName, age));
     assertThat(deleted, is(1));
-  }
-  
-  @Test
-  public void findUserByFullName() throws Exception {
-    String firstName = "shi";
-    String lastName = "ju";
-    ResultSet resultSet = mock(ResultSet.class);
-    doAnswer(new NextTrueTimeAnswer(1)).when(resultSet).next();
-    doReturn(resultSet).when(session).find(toStringArray(firstName,lastName), EQ, 1, 0);
-    doReturnSessionWhenHsClientOpenIndexSession("FULL_NAME", new String[] { "id", "first_name", "last_name", "age" });
-    User user = proxyFactory.newProxyOf(UserRepository.class).findUserByFullName(firstName, lastName);
-    assertThat(user, is(notNullValue()));
-  }
-  
-  @Test
-  public void findLastNameOfUserByAge() throws Exception {
-    int age = 22;
-    ResultSet resultSet = mock(ResultSet.class);
-    doAnswer(new NextTrueTimeAnswer(3)).when(resultSet).next();
-    doReturn("name").when(resultSet).getString(0);
-    doReturn(resultSet).when(session).find(toStringArray(age), EQ, DEFAULT_LIMIT, DEFAULT_OFFSET);
-    doReturnSessionWhenHsClientOpenIndexSession("AGE", new String[] { "last_name", "age" });
-    Collection<String> names = proxyFactory.newProxyOf(UserRepository.class).findLastNameOfUserByAge(age );
-    assertThat(names.size(), is(3));
   }
 
   @Test
@@ -121,6 +77,18 @@ public class HandlerSocketProxyTest {
     doReturnSessionWhenHsClientOpenIndexSession("AGE", new String[] { "id", "first_name", "last_name", "age" });
     proxyFactory.newProxyOf(UserRepository.class).deleteUserAgeLessThan(age);
     verify(session).delete(toStringArray(age), LT, DEFAULT_LIMIT, DEFAULT_OFFSET);
+  }
+
+  @Test
+  public void findLastNameOfUserByAge() throws Exception {
+    int age = 22;
+    ResultSet resultSet = mock(ResultSet.class);
+    doAnswer(new NextTrueTimeAnswer(3)).when(resultSet).next();
+    doReturn("name").when(resultSet).getString(0);
+    doReturn(resultSet).when(session).find(toStringArray(age), EQ, DEFAULT_LIMIT, DEFAULT_OFFSET);
+    doReturnSessionWhenHsClientOpenIndexSession("AGE", new String[] { "last_name", "age" });
+    Collection<String> names = proxyFactory.newProxyOf(UserRepository.class).findLastNameOfUserByAge(age);
+    assertThat(names.size(), is(3));
   }
 
   @Test
@@ -137,19 +105,26 @@ public class HandlerSocketProxyTest {
   }
 
   @Test
+  public void findUserByFullName() throws Exception {
+    String firstName = "shi";
+    String lastName = "ju";
+    ResultSet resultSet = mock(ResultSet.class);
+    doAnswer(new NextTrueTimeAnswer(1)).when(resultSet).next();
+    doReturn(resultSet).when(session).find(toStringArray(firstName, lastName), EQ, 1, 0);
+    doReturnSessionWhenHsClientOpenIndexSession("FULL_NAME", new String[] { "id", "first_name", "last_name", "age" });
+    User user = proxyFactory.newProxyOf(UserRepository.class).findUserByFullName(firstName, lastName);
+    assertThat(user, is(notNullValue()));
+  }
+
+  @Test
   public void findUserById() throws Exception {
     final long id = 1L;
     ResultSet resultSet = mock(ResultSet.class);
     doAnswer(new NextTrueTimeAnswer(1)).when(resultSet).next();
     doReturn(resultSet).when(session).find(toStringArray(id), EQ, 1, 0);
-    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "id", "first_name", "last_name", "age" });
+    doReturnSessionWhenHsClientOpenIndexSession(PRIMARY, new String[] { "id", "first_name", "last_name", "age" });
     User user = proxyFactory.newProxyOf(UserRepository.class).findUserById(id);
     assertThat(user, is(notNullValue()));
-  }
-
-  @Before
-  public void setUp() throws Exception {
-    reset(hsClient, session);
   }
 
   @Test
@@ -168,7 +143,7 @@ public class HandlerSocketProxyTest {
     final String firstName = "shi";
     final String lastName = "ju";
     final int age = 22;
-    doReturnSessionWhenHsClientOpenIndexSession("PRIMARY", new String[] { "id", "first_name", "last_name", "age" });
+    doReturnSessionWhenHsClientOpenIndexSession(PRIMARY, new String[] { "id", "first_name", "last_name", "age" });
     proxyFactory.newProxyOf(UserRepository.class).update(new User(id, firstName, lastName, age));
     verify(session).update(toStringArray(id),
                            toStringArray(firstName, lastName, age),
@@ -177,12 +152,18 @@ public class HandlerSocketProxyTest {
                            DEFAULT_OFFSET);
   }
 
-  private void doReturnSessionWhenHsClientOpenIndexSession(String index, final String[] columns) throws Exception {
-    doReturn(session).when(hsClient).openIndexSession(DATABASE, "user_t", index, columns);
-  }
+  private final static class NextTrueTimeAnswer implements Answer<Boolean> {
 
-  private final HSClient hsClient = mock(HSClient.class);
-  private final IndexSession session = mock(IndexSession.class);
-  private final ProxyFactory proxyFactory = new HandlerSocketProxyFactory(hsClient, DATABASE);
+    public NextTrueTimeAnswer(int time) {
+      this.time = time;
+    }
+
+    @Override
+    public Boolean answer(InvocationOnMock invocation) throws Throwable {
+      return --time >= 0;
+    }
+
+    private int time;
+  }
 
 }

@@ -80,7 +80,7 @@ public class ReturnType {
   }
 
   public ReturnType(Method method) {
-    returnType = method.getReturnType();
+    type = method.getReturnType();
     assertNotArrayReturnType(method);
     assertNotCharacterReturnType(method);
     assertCollectionNotIterableReturnType(method);
@@ -102,7 +102,7 @@ public class ReturnType {
   }
 
   public boolean isIn(Class<?>... classes) {
-    return set(classes).contains(returnType);
+    return set(classes).contains(type);
   }
 
   public boolean isNotIn(Class<?>... classes) {
@@ -113,7 +113,7 @@ public class ReturnType {
    * @return true if type is single object but not primitive type or it wrapper or String.
    */
   public boolean isSingleEntity() {
-    if (isCollection(returnType)) return false;
+    if (isCollection(type)) return false;
     if (isIn(Void.class, Void.TYPE,
              Boolean.class, Boolean.TYPE,
              Byte.class, Byte.TYPE,
@@ -126,24 +126,31 @@ public class ReturnType {
     return true;
   }
 
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append("ReturnType [type=").append(type).append(", genericType=").append(genericType).append("]");
+    return builder.toString();
+  }
+
   private void assertCollectionNotIterableReturnType(Method method) {
-    if (isIterableButNotCollection(returnType))
+    if (isIterableButNotCollection(type))
       throw new IllegalArgumentException("Please use Collection<E>, Iterable<E> return type is unsupported for "
           + method);
   }
 
   private void assertCollectionNotIteratorReturnType(Method method) {
-    if (ClassUtils.isIterator(returnType))
+    if (ClassUtils.isIterator(type))
       throw new IllegalArgumentException("Please use Collection<E>, Iterator<E> return type is unsupported for "
           + method);
   }
 
   private void assertNotArrayReturnType(Method method) {
-    if (returnType.isArray()) throw new IllegalArgumentException("Array return type is unsupported for " + method);
+    if (type.isArray()) throw new IllegalArgumentException("Array return type is unsupported for " + method);
   }
 
   private void assertNotCharacterReturnType(Method method) {
-    if (isCharacter(returnType))
+    if (isCharacter(type))
       throw new IllegalArgumentException("Character return type is unsupported for " + method);
   }
 
@@ -185,7 +192,7 @@ public class ReturnType {
   }
 
   private Object entityValue(ResultSet result) throws SQLException {
-    return entity(returnType, result);
+    return entity(type, result);
   }
 
   private Object entityValues(ResultSet result) throws SQLException {
@@ -203,7 +210,7 @@ public class ReturnType {
   }
 
   private Class<?> getGenericTypeIfIsIterableReturnType(Method method) {
-    if (!isIterable(returnType)) return null;
+    if (!isIterable(type)) return null;
     Type genericReturnType = method.getGenericReturnType();
     if (!isParameterizedType(genericReturnType))
       throw new IllegalArgumentException("Non-Parameterized iterable type is unsupported for " + method);
@@ -227,7 +234,7 @@ public class ReturnType {
   private Collection<Object> newCollectionInstanceOfReturnType() {
     if (isIn(Set.class)) return new HashSet<Object>();
     if (isIn(List.class, Collection.class)) return new ArrayList<Object>();
-    throw new IllegalStateException(returnType + " is unsupported, please use Collection<E> or List<E> or Set<E>");
+    throw new IllegalStateException(type + " is unsupported, please use Collection<E> or List<E> or Set<E>");
   }
 
   private Object shortValues(ResultSet result) throws SQLException {
@@ -238,14 +245,14 @@ public class ReturnType {
   }
 
   private Object singleton(ResultSet result) throws SQLException {
-    if (isBoolean(returnType)) return booleanValue(result);
-    if (isByte(returnType)) return byteValue(result);
-    if (isShort(returnType)) return shortValue(result);
-    if (isInteger(returnType)) return integerValue(result);
-    if (isLong(returnType)) return longValue(result);
-    if (isFloat(returnType)) return floatValue(result);
-    if (isDouble(returnType)) return doubleValue(result);
-    if (isString(returnType)) return stringValue(result);
+    if (isBoolean(type)) return booleanValue(result);
+    if (isByte(type)) return byteValue(result);
+    if (isShort(type)) return shortValue(result);
+    if (isInteger(type)) return integerValue(result);
+    if (isLong(type)) return longValue(result);
+    if (isFloat(type)) return floatValue(result);
+    if (isDouble(type)) return doubleValue(result);
+    if (isString(type)) return stringValue(result);
     return entityValue(result);
   }
 
@@ -257,12 +264,12 @@ public class ReturnType {
   }
 
   private Object toUserFriendlyObject(ResultSet result) throws SQLException {
-    if (isCollection(returnType)) return collection(result);
+    if (isCollection(type)) return collection(result);
     return singleton(result);
   }
 
   private final Class<?> genericType;
   private final boolean isVoid;
-  private final Class<?> returnType;
+  private final Class<?> type;
 
 }

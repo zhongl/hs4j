@@ -26,11 +26,21 @@ public class ParameterAnnotations {
     final Annotation[][] parameterAnnotations = method.getParameterAnnotations();;
     for (int x = 0; x < parameterAnnotations.length; x++) {
       if (isEmpty(parameterAnnotations[x]) && applyableCollector.apply(x, null)) continue;
-      for (Annotation annotation : parameterAnnotations[x]) 
+      for (Annotation annotation : parameterAnnotations[x])
         applyableCollector.apply(x, annotation);
     }
-    applyableCollector.validate();
+    try {
+      applyableCollector.validate();
+    } catch (IllegalArgumentException e) {
+      throw appendMethodTo(e);
+    }
     return applyableCollector;
+  }
+
+  private RuntimeException appendMethodTo(IllegalArgumentException e) {
+    RuntimeException ex = new IllegalArgumentException(e.getMessage() + " -> " + method);
+    ex.setStackTrace(e.getStackTrace());
+    return ex;
   }
 
   public boolean isEntityTypeParameter() {
@@ -82,7 +92,7 @@ public class ParameterAnnotations {
       return apply(annotation) && indexs.add(index);
     }
 
-    private void validate() {
+    private void validate() throws IllegalArgumentException {
       if (invalid(indexs.size())) throw new IllegalArgumentException(invalidMessage);
     }
 

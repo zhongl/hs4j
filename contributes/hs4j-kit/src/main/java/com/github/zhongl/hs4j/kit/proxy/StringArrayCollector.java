@@ -35,7 +35,7 @@ abstract class StringArrayCollector extends ApplyableCollector<String[]> {
 class ValuesCollector extends StringArrayCollector {
 
   public ValuesCollector() {
-    super("At lease one argument without annotation is needed as value.");
+    super("At lease one argument without annotation is needed as value");
   }
 
   @Override
@@ -48,7 +48,7 @@ class ValuesCollector extends StringArrayCollector {
 class KeysCollector extends StringArrayCollector {
 
   public KeysCollector() {
-    super("At lease one argument should be annotated by @key.");
+    super("At lease one argument should be annotated by @Key");
   }
 
   @Override
