@@ -25,7 +25,7 @@ public class UpdateHandler implements InvocationHandler {
     limit = new LimitPair(parameterAnnotations, returnType);
     if (parameterAnnotations.isEntityTypeParameter()) {
       keysCollector = new EntityCollector(KEYS);
-      valuesCollector = new EntityCollector(VALUES);
+      valuesCollector = new EntityCollector(ALL);
     } else {
       keysCollector = parameterAnnotations.apply(new KeysCollector());
       valuesCollector = parameterAnnotations.apply(new ValuesCollector());

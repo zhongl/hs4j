@@ -86,7 +86,7 @@ public class HandlerSocketProxyTest extends BaseTest {
     doAnswer(new NextTrueTimeAnswer(3)).when(resultSet).next();
     doReturn("name").when(resultSet).getString(0);
     doReturn(resultSet).when(session).find(toStringArray(age), EQ, DEFAULT_LIMIT, DEFAULT_OFFSET);
-    doReturnSessionWhenHsClientOpenIndexSession("AGE", new String[] { "last_name", "age" });
+    doReturnSessionWhenHsClientOpenIndexSession("AGE", new String[] { "last_name" });
     Collection<String> names = proxyFactory.newProxyOf(UserRepository.class).findLastNameOfUserByAge(age);
     assertThat(names.size(), is(3));
   }
@@ -131,7 +131,7 @@ public class HandlerSocketProxyTest extends BaseTest {
   public void updateUserAge() throws Exception {
     final String name = "zhongl";
     final int age = 22;
-    doReturnSessionWhenHsClientOpenIndexSession("NAME", new String[] { "last_name", "age" });
+    doReturnSessionWhenHsClientOpenIndexSession("NAME", new String[] { "age" });
     doReturn(3).when(session).update(toStringArray(name), toStringArray(age), EQ, DEFAULT_LIMIT, DEFAULT_OFFSET);
     int changed = proxyFactory.newProxyOf(UserRepository.class).updateUserAge(name, age);
     assertThat(changed, is(3));
@@ -146,7 +146,7 @@ public class HandlerSocketProxyTest extends BaseTest {
     doReturnSessionWhenHsClientOpenIndexSession(PRIMARY, new String[] { "id", "first_name", "last_name", "age" });
     proxyFactory.newProxyOf(UserRepository.class).update(new User(id, firstName, lastName, age));
     verify(session).update(toStringArray(id),
-                           toStringArray(firstName, lastName, age),
+                           toStringArray(id, firstName, lastName, age),
                            EQ,
                            DEFAULT_LIMIT,
                            DEFAULT_OFFSET);

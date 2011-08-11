@@ -47,7 +47,7 @@ interface UserRepository {
 
   @HandlerSocket(FIND)
   @Index("AGE")
-  @Columns({ "last_name", "age" })
+  @Columns("last_name")
   @Operator(EQ)
   Collection<String> findLastNameOfUserByAge(@Key int value);
 
@@ -55,7 +55,7 @@ interface UserRepository {
   void update(User user);
 
   @HandlerSocket(UPDATE)
-  @Columns({ "last_name", "age" })
+  @Columns("age")
   @Index("NAME")
   int updateUserAge(@Key String lastName, int age);
 
