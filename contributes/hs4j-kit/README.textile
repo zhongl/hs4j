@@ -1,0 +1,78 @@
+HS4J Kit can help developers easier to use HS4J by some annotations and proxy object.
+
+
+h1. Getting Started
+
+# git clone https://github.com/zhongl/hs4j.git;
+# mvn clean install;
+# add dependency like this:
+bc. 
+<dependency>
+  <groupId>com.github.zhongl</groupId>
+  <artifactId>hs4j-kit</artifactId>
+</dependency>
+
+h1. How To Use
+
+For example, in user management domain there are often:
+
+bc. 
+class User {
+  Long id;
+  String name;
+  Integer age;
+}
+
+bc. 
+interface UserRepository {
+  void add(User user);
+  void delete(User user);
+  User findBy(long id);
+  void update(User user);
+}
+
+bc. 
+CREATE TABLE `user_t` (  
+  `id` int(10) unsigned NOT NULL,  
+  `name` varchar(50) DEFAULT NULL,  
+  `age` int(3) DEFAULT NULL,  
+  PRIMARY KEY (`id`),  
+  KEY `NAME` (`name`),
+  KEY `AGE` (`age`)  
+) ENGINE=InnoDB
+
+By using hs4j-kit, you just need annotate methods of @UserRepository@ like this;
+
+bc. 
+@Table("user_t")
+@Entity(User.class)
+interface UserRepository {
+  @HandlerSocket(INSERT) void add(User user);
+  @HandlerSocket(DELETE) void delete(User user);
+  @HandlerSocket(FIND)   User findBy(long id);
+  @HandlerSocket(UPDATE) void update(User user);
+}
+
+Then, get proxy instance of @UserRepository@ and use it:
+
+bc. 
+HsClient hsClient = ...
+UserRepository proxy = new HandlerSocketProxyFactory(hsClient, "dbname").newProxyOf(UserRepository.class);
+proxy.add(new User(1L, "killme2008", 18));
+hsClient.shutdown();
+
+Easy, right?!
+
+You can get more help from:
+# unit test - https://github.com/killme2008/hs4j/tree/master/contributes/hs4j-kit/src/test/java/com/github/zhongl/hs4j/kit
+
+Having fun! 
+
+Author: zhongl
+Date  : 2011-08
+
+
+
+
+
+
