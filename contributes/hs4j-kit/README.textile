@@ -6,6 +6,7 @@ h1. Getting Started
 # git clone https://github.com/zhongl/hs4j.git;
 # mvn clean install;
 # add dependency like this:
+
 bc. 
 <dependency>
   <groupId>com.github.zhongl</groupId>
@@ -63,8 +64,7 @@ hsClient.shutdown();
 
 Easy, right?!
 
-You can get more help from:
-# unit test - https://github.com/killme2008/hs4j/tree/master/contributes/hs4j-kit/src/test/java/com/github/zhongl/hs4j/kit
+You can get more help from "unit test":https://github.com/killme2008/hs4j/tree/master/contributes/hs4j-kit/src/test/java/com/github/zhongl/hs4j/kit .
 
 Having fun! 
 
